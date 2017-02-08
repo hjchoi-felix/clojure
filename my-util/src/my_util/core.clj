@@ -35,3 +35,12 @@
 ;test for sub-folder of drive-root : if start from certain drive-root, try to access all drive
 (defn test-find [name]
     (map walk (list "c:/__devroot") (list name)))
+
+;my objective
+;function that get root-dir, search-text and filter predicates
+;return file seq
+(defn find-all [root-dir search-text & preds]
+  (filter (apply every-pred preds) (file-seq (file root-dir))))
+
+(defn get-extension [path]
+  (.substring path (inc (.lastIndexOf path "."))))
