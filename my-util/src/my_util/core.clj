@@ -22,8 +22,12 @@
 
 (use `[clojure.java.io])
 
+(defn make-pattern [search-text]
+  (. java.util.regex.Pattern compile (str "(?i)" search-text)))
+
 (defn walk [dirpath pattern]
-  (let [p (. java.util.regex.Pattern compile (str "(?i)" pattern))]
+;  (let [p (. java.util.regex.Pattern compile (str "(?i)" pattern))]
+  (let [p (make-pattern pattern)]
     (doall (filter #(re-find p (.getName %))
                    (file-seq (file dirpath))))))
 
@@ -40,7 +44,26 @@
 ;function that get root-dir, search-text and filter predicates
 ;return file seq
 (defn find-all [root-dir search-text & preds]
-  (filter (apply every-pred preds) (file-seq (file root-dir))))
+  (let [search-pred #(re-find (make-pattern search-text) (.getName %1))]
+    (filter (apply every-pred search-pred preds) (file-seq (file root-dir)))))
 
 (defn get-extension [path]
   (.substring path (inc (.lastIndexOf path "."))))
+
+(defn is-video [file]
+  (let [path (.getPath file)]
+    (= (get-extension path) "wmv")))
+
+(defn is-video2 [file]
+  (let [extension (get-extension(.getPath file))]
+    (cond (= extension "avi") true
+              (= extension "wmv") true
+              (= extension "mp4") true
+              (= extension "mkv") true)))
+
+(defn is-video-extension [file-name]
+  (let [ext (get-extension file-name)]
+    (or (= ext "avi")
+          (= ext "wmv")
+          (= ext "mp4")
+          (= ext "mkv"))))
