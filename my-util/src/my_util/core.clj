@@ -67,3 +67,8 @@
           (= ext "wmv")
           (= ext "mp4")
           (= ext "mkv"))))
+
+;test syntex
+(defn sample-fun
+  ([] (println "no args"))
+  ([name] (println "got name" name)))
