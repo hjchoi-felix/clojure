@@ -46,6 +46,10 @@
                       [0 1 2 3 4 5 6 7 8 9 10]
                       [0 1 2 3 4 5 6 7 8 9 10]])
 
+(defn test1 [stop]
+;  (map #(.indexOf #1) stop))
+   (map (fn [e] ((reelstrip (e 0)) (e 1))) (map-indexed vector stop)))
+
 (defn make-symbolset [stop]
      [(get (get reelstrip 0) (get stop 0))
       (get (get reelstrip 1) (get stop 1))
@@ -59,5 +63,5 @@
          vs [[1 2 3 4 5]]]
     {:stop stop
 ;     :vs [[0 0 0 0 0] [0 0 0 0 0] [0 0 0 0 0]]
-      :vs (make-symbolset stop)
+      :vs (test1 stop)
      :reward 9999}))
